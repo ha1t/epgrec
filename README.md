@@ -7,15 +7,9 @@ epgrecをforkして、friioを接続してあるLinuxサーバ上で動作させ
 ## サポートOS ##
 - Ubuntu 10.04.2 LTS
 
-## v0.1 ##
-とりあえず最低限の動作。
-friioをcrontab経由で動かせるようになった。
-DBレベルで変更を始めたのでインストーラーもまともに動作しない。
-
 ## TODO ##
 
 - DB周りをインストーラーで設定できるように
-- http://twitter.github.com/bootstrap/
 - CSRFのリスクをなくす
 - 放送時刻変更への完璧な追従
 - do-record.sh & recompleteを使うように
@@ -23,7 +17,12 @@ DBレベルで変更を始めたのでインストーラーもまともに動作
 - DBRecordからの完全な脱出
 - recorder_serviceにrecfriioハードコードされているのをやめる
 - table name prefixをなくす
-- keyword削除
+- twitter bootstrap 2.0対応
+
+## v0.1 ##
+とりあえず最低限の動作。
+friioをcrontab経由で動かせるようになった。
+DBレベルで変更を始めたのでインストーラーもまともに動作しない。
 
 ## ファイル群 ##
 

@@ -67,9 +67,6 @@ class Settings extends SimpleXMLElement {
 			if(defined("USE_THUMBS")) $xml->use_thumbs = USE_THUMBS ? 1 : 0;
 			else $xml->use_thumbs = 0;
 			
-			if(defined("MEDIATOMB_UPDATE")) $xml->mediatomb_update = MEDIATOMB_UPDATE ? 1 : 0;
-			else $xml->mediatomb_update = 0;
-			
 			if(defined("FILENAME_FORMAT")) $xml->filename_format = FILENAME_FORMAT;
 			else $xml->filename_format = "%TYPE%%CH%_%ST%_%ET%";
 			
