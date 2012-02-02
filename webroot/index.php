@@ -1,6 +1,5 @@
 <?php
-require_once "config.php";
-require_once  INSTALL_PATH . "/Smarty/Smarty.class.php";
+require_once dirname(dirname(__FILE__) ) . "/config.php";
 require_once  INSTALL_PATH . "/Settings.class.php";
 
 // 設定ファイルの有無を検査する
@@ -133,6 +132,8 @@ $chs_width = $ch_set_width * count($channel_map);
 $get_param = $_SERVER['SCRIPT_NAME'] . "?type=".$type."&length=".$program_length."";
  
 $smarty = new Smarty();
+$smarty->template_dir = dirname(dirname(__FILE__)) . '/templates/'; 
+$smarty->compile_dir = dirname(dirname(__FILE__)) . '/templates_c/'; 
  
 // カテゴリ一覧
 $db = DB::conn();
