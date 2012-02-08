@@ -38,19 +38,19 @@ class Keyword extends Model
             }
         }
 
-        if( $this->type != "*" ) {
+        if ($this->type != "*") {
             $sql .= " AND type = '".$this->type."'";
         }
 
-        if( $this->category_id != 0 ) {
-            $sql .= " AND category_id = '".$this->category_id."'";
+        if ($this->category_disc != 0) {
+            $sql .= " AND category_disc = '".$this->category_disc."'";
         }
 
-        if( $this->channel_id != 0 ) {
-            $sql .= " AND channel_id = '".$this->channel_id."'";
+        if ($this->channel_disc != 0) {
+            $sql .= " AND channel_disc = '".$this->channel_disc."'";
         }
 
-        if( $this->weekofday != 7 ) {
+        if ($this->weekofday != 7) {
             $sql .= " AND WEEKDAY(starttime) = '".$this->weekofday."'";
         }
 
