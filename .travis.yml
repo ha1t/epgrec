@@ -1,5 +1,8 @@
 language: php
 
+before_script:
+  - "mysql -e 'create database epgrec_test;'"
+
 php:
   - 5.2
   - 5.3

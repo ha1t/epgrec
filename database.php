@@ -27,7 +27,7 @@ class DB
      *
      * @return DB
      */
-    public static function conn($database = 'kmon', $driver_options = array())
+    public static function conn($database = '', $driver_options = array())
     {
         static $obj; 
         if (isset($obj[$database])) return $obj[$database];
@@ -36,6 +36,13 @@ class DB
         $dsn = DB_DSN;
         $username = DB_USERNAME;
         $password = DB_PASSWORD;
+
+        if ($database === 'travis-ci') {
+            $dsn = 'mysql:dbname=epgrec_test;host=localhost;';
+            $username = 'root';
+            $password = '';
+        } 
+        
         $driver_options = array_merge(array(PDO::ATTR_TIMEOUT => DB_ATTR_TIMEOUT), $driver_options);
 
         $obj[$database] = new self($database, $dsn, $username, $password, $driver_options);
