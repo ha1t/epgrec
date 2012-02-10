@@ -7,6 +7,14 @@ epgrecをforkして、friioを接続してあるLinuxサーバ上で動作させ
 ## サポートOS ##
 - Ubuntu 10.04.2 LTS
 
+## サポートしているPHPバージョン ##
+- PHP 5.2
+- PHP 5.3
+- PHP 5.4
+
+## CI環境 ##
+http://travis-ci.org/#!/ha1t/epgrec
+
 ## TODO ##
 
 - DB周りをインストーラーで設定できるように
