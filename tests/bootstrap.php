@@ -6,16 +6,24 @@
 
 error_reporting( E_ALL | E_STRICT );
 
-require_once dirname(dirname(__FILE__)) . '/config.php'; 
+if (file_exists(dirname(dirname(__FILE__)) . '/config.php')) {
+    require_once dirname(dirname(__FILE__)) . '/config.php'; 
+} else {
+    require_once dirname(dirname(__FILE__)) . '/config_travisci.php'; 
+} 
 
 // DBにtable作る
-$db = DB::conn('travis-ci');
+function create_table() {
+    $db = DB::conn('travis-ci');
 
-$sql = file_get_contents(dirname(dirname(__FILE__)) . '/config/epgrec.sql'); 
-$db->query($sql); 
+    $sql = file_get_contents(dirname(dirname(__FILE__)) . '/config/epgrec.sql'); 
+    $db->query($sql); 
 
-$sql = file_get_contents(dirname(__FILE__) . '/testdata.sql'); 
-$db->query($sql); 
+    $sql = file_get_contents(dirname(__FILE__) . '/testdata.sql'); 
+    $db->query($sql); 
+} 
+
+create_table(); 
 
 /*
 $sql = "SELECT * FROM Recorder_programTbl LIMIT 5";
