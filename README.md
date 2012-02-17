@@ -1,4 +1,4 @@
-# epgrec friio #
+# epgrec friio [![Build Status](https://secure.travis-ci.org/ha1t/epgrec.png?branch=master)](http://travis-ci.org/ha1t/epgrec)
 epgrecをforkして、friioを接続してあるLinuxサーバ上で動作させる事に特化したバージョンを作りました。
 従来atコマンドを渡していた部分をcrontabに変更したのが一番特徴的な変更部分ですが、
 全体的にクエリリクエストが多かったり、無駄な処理が多くなっている部分を修正してあります。
