@@ -18,9 +18,6 @@ function create_table() {
 
     $sql = file_get_contents(dirname(dirname(__FILE__)) . '/config/epgrec.sql'); 
     $db->query($sql); 
-
-    $sql = file_get_contents(dirname(__FILE__) . '/testdata.sql'); 
-    $db->query($sql); 
 } 
 
 create_table(); 
