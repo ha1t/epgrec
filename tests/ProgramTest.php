@@ -20,4 +20,12 @@ class ProgramTest extends PHPUnit_Framework_TestCase
         $rows = Program::search('', array()); 
         $this->assertTrue(is_array($rows)); 
     }
+
+    public function testGetId() 
+    {
+        $rows = Program::search('', array()); 
+        $row = current($rows);
+        $this->assertEquals('program', strtolower(get_class(Program::get($row['program_disc'])))); 
+        $this->assertFalse(Program::get('dummy')); 
+    }
 }
