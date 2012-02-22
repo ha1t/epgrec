@@ -1,6 +1,6 @@
 <?php
 // bootstrap
-require_once dirname(dirname(__FILE__)) . '/database.php';
+require_once dirname(__FILE__) . '/database.php';
 require_once dirname(dirname(__FILE__)) . '/models/model.php';
 require_once dirname(dirname(__FILE__)) . '/models/category.php';
 require_once dirname(dirname(__FILE__)) . '/models/channel.php';
