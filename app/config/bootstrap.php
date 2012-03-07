@@ -10,7 +10,11 @@ require_once dirname(dirname(__FILE__)) . '/models/recorder_service.php';
 
 require_once dirname(dirname(__FILE__)) . '/models/channel_master.php';
 
-require_once dirname(dirname(__FILE__)) . '/Smarty/Smarty.class.php';
+require_once APP_DIR.'app_controller.php';
+require_once APP_DIR.'app_model.php';
+require_once APP_DIR.'app_exception.php';
+
+require_once ROOT_DIR . '/Smarty/Smarty.class.php';
 
 // autoload
 spl_autoload_register(function($name) {

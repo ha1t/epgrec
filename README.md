@@ -17,7 +17,7 @@ http://travis-ci.org/#!/ha1t/epgrec
 
 ## TODO ##
 
-- DB周りをインストーラーで設定できるように
+- DB周りをインストーラーで設定できるように(installerの再実装)
 - CSRFのリスクをなくす
 - 放送時刻変更への完璧な追従
 - do-record.sh & recompleteを使うように
