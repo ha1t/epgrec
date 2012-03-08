@@ -140,8 +140,8 @@ class TopController extends AppController
         $get_param = $_SERVER['SCRIPT_NAME'] . "?type=".$type."&length=".$program_length."";
 
         $smarty = new Smarty();
-        $smarty->template_dir = dirname(dirname(__FILE__)) . '/templates/'; 
-        $smarty->compile_dir = dirname(dirname(__FILE__)) . '/templates_c/'; 
+        $smarty->template_dir = ROOT_DIR . 'templates/'; 
+        $smarty->compile_dir = ROOT_DIR . 'templates_c/'; 
 
         // カテゴリ一覧
         $db = DB::conn();
