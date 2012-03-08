@@ -144,7 +144,6 @@ class TopController extends AppController
         $smarty->compile_dir = ROOT_DIR . 'templates_c/'; 
 
         // カテゴリ一覧
-        $db = DB::conn();
         $smarty->assign('categories', Category::getAll());
 
         // タイプ選択
