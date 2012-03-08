@@ -9,7 +9,8 @@ error_reporting( E_ALL | E_STRICT );
 define('ROOT_DIR', dirname(__DIR__) . '/');
 define('APP_DIR', ROOT_DIR . 'app/');
 
-require_once ROOT_DIR.'dietcake/dietcake.php';
+require_once ROOT_DIR . 'dietcake/dietcake.php';
+require_once CONFIG_DIR . 'bootstrap.php';
 
 if (file_exists(dirname(dirname(__FILE__)) . '/config.php')) {
     require_once dirname(dirname(__FILE__)) . '/config.php'; 
