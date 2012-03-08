@@ -11,4 +11,14 @@ class CategoryTest extends PHPUnit_Framework_TestCase
         $result = Category::getAll(); 
         $this->assertTrue(is_array($result)); 
     } 
+
+    public function testGet()
+    {
+        $result = Category::getAll(); 
+        if (count($result) > 0) {
+            $row = current($result); 
+            $category = Category::get($row->category_disc);
+            $this->assertEquals('Category', get_class($category)); 
+        } 
+    } 
 }
