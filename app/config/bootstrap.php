@@ -19,6 +19,8 @@ require_once APP_DIR.'app_exception.php';
 
 require_once ROOT_DIR . '/Smarty/Smarty.class.php';
 
+define('MASTER_DIR', APP_DIR . 'master/'); 
+
 // autoload
 spl_autoload_register(function($name) {
     $filename = Inflector::underscore($name) . '.php';
