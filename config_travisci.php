@@ -4,8 +4,6 @@ define('DB_USERNAME', 'root');
 define('DB_PASSWORD', '');
 define('DB_ATTR_TIMEOUT', 3);
 
-require_once dirname(__FILE__) . '/config/bootstrap.php';
-
 // 録画モード（option）
 $RECORD_MODE = array(
 	// ※ 0は必須で、変更不可です。
