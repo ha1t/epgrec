@@ -14,6 +14,8 @@ class CategoryTest extends PHPUnit_Framework_TestCase
 
     public function testGet()
     {
+        $this->assertFalse(Category::get(''));
+
         $result = Category::getAll(); 
         if (count($result) > 0) {
             $row = current($result); 
