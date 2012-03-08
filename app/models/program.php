@@ -3,7 +3,7 @@
  *
  *
  */
-class Program extends Model
+class Program extends AppModel
 {
     const TABLE = 'Recorder_programTbl';
 
@@ -29,11 +29,11 @@ class Program extends Model
         $db = DB::conn();
         $table = self::TABLE;
         $category_table = Category::TABLE;
-        $sql = <<<EOD
+        $sql = <<<__SQL__
 SELECT * FROM {$table}
   LEFT JOIN {$category_table} ON {$table}.category_disc = {$category_table}.category_disc
   {$options}
-EOD;
+__SQL__;
         return $db->rows($sql, $args);
     }
 
