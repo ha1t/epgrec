@@ -30,20 +30,12 @@ class KeywordController extends AppController
             }
         }
 
-        $sql = <<<EOD
-SELECT * FROM Recorder_keywordTbl
-  LEFT JOIN Recorder_channelTbl ON Recorder_keywordTbl.channel_disc = Recorder_channelTbl.channel_disc
-  LEFT JOIN Recorder_categoryTbl ON Recorder_keywordTbl.category_disc = Recorder_categoryTbl.category_disc
-EOD;
-
-        $db = DB::conn();
-        $keywords = $db->rows($sql);
-
         $smarty = new Smarty();
         $smarty->template_dir = ROOT_DIR . 'templates/'; 
         $smarty->compile_dir = ROOT_DIR . 'templates_c/'; 
-        $smarty->assign('keywords', $keywords);
+        $smarty->assign('keywords', Keyword::getKeywords());
         $smarty->assign('sitetitle', '自動録画キーワードの管理');
         $smarty->display('keywordTable.html');
+        exit;
     } 
 }

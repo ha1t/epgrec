@@ -3,7 +3,7 @@
  * キーワード予約モデル
  *
  */
-class Keyword extends Model
+class Keyword extends AppModel
 {
     const TABLE = 'Recorder_keywordTbl';
 
@@ -15,6 +15,18 @@ class Keyword extends Model
             return false;
         }
         return new self($row);
+    }
+
+    public function getKeywords() 
+    {
+        $sql = <<<__SQL__
+SELECT * FROM Recorder_keywordTbl
+  LEFT JOIN Recorder_channelTbl ON Recorder_keywordTbl.channel_disc = Recorder_channelTbl.channel_disc
+  LEFT JOIN Recorder_categoryTbl ON Recorder_keywordTbl.category_disc = Recorder_categoryTbl.category_disc
+__SQL__;
+        $db = DB::conn();
+        $keywords = $db->rows($sql);
+        return $keyword;
     }
 
     // 指定条件での検索結果を返す
