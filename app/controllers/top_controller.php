@@ -26,13 +26,16 @@ class TopController extends AppController
         // パラメータの処理
         // 表示する長さ（時間）
         $program_length = $settings->program_length;
-        if( isset( $_GET['length']) ) $program_length = (int) $_GET['length'];
+        if (isset($_GET['length'])) {
+           $program_length = (int) $_GET['length'];
+        }
+
         // 地上=GR/BS=BS
         $type = "GR";
-        if( isset( $_GET['type'] ) ) $type = $_GET['type'];
+
         // 現在の時間
         $top_time = mktime( date("H"), 0 , 0 );
-        if( isset( $_GET['time'] ) ) {
+        if (isset($_GET['time'] ) ) {
             if( sscanf( $_GET['time'] , "%04d%2d%2d%2d", $y, $mon, $day, $h ) == 4 ) {
                 $tmp_time = mktime( $h, 0, 0, $mon, $day, $y );
                 if( ($tmp_time < ($top_time + 3600 * 24 * 8)) && ($tmp_time > ($top_time - 3600 * 24 * 8)) )
@@ -46,14 +49,7 @@ class TopController extends AppController
             $tvtimes[$i] = date("H", $top_time + 3600 * $i);
         }
 
-        // 番組表
-        if ($type == "BS") {
-            $channel_map = $BS_CHANNEL_MAP;
-        } else if ($type == "GR") {
-            $channel_map = ChannelMaster::$GR;
-        } else if ($type == "CS") {
-            $channel_map = $CS_CHANNEL_MAP;
-        }
+        $channel_map = ChannelMaster::$GR;
 
         $db = DB::conn();
         $st = 0;
@@ -149,28 +145,13 @@ class TopController extends AppController
         // タイプ選択
         $types = array();
         $i = 0;
-        if ($settings->bs_tuners != 0) {
-            $types[$i]['selected'] = $type == "BS" ? 'class="selected"' : "";
-            $types[$i]['link'] = $_SERVER['SCRIPT_NAME'] . "?type=BS&length=".$program_length."&time=".date( "YmdH", $top_time);
-            $types[$i]['name'] = "BS";
-            $i++;
-
-            // CS
-            if ($settings->cs_rec_flg != 0) {
-                $types[$i]['selected'] = $type == "CS" ? 'class="selected"' : "";
-                $types[$i]['link'] = $_SERVER['SCRIPT_NAME'] . "?type=CS&length=".$program_length."&time=".date( "YmdH", $top_time);
-                $types[$i]['name'] = "CS";
-                $i++;
-            }
-        }
-
         if ($settings->gr_tuners != 0) {
             $types[$i]['selected'] = $type == "GR" ? 'class="selected"' : "";
             $types[$i]['link'] = $_SERVER['SCRIPT_NAME'] . "?type=GR&length=".$program_length."&time=".date( "YmdH", $top_time);
             $types[$i]['name'] = "地上デジタル";
             $i++;
         }
-        $smarty->assign( "types", $types );
+        $smarty->assign("types", $types);
 
         // 日付選択
         $days = array();
@@ -211,7 +192,7 @@ class TopController extends AppController
         $smarty->assign( "height_per_hour", $settings->height_per_hour );
         $smarty->assign( "height_per_min", $settings->height_per_hour / 60 );
         $sitetitle = date( "Y", $top_time ) . "年" . date( "m", $top_time ) . "月" . date( "d", $top_time ) . "日". date( "H", $top_time ) .
-            "時～".( $type == "GR" ? "地上デジタル" : "BSデジタル" )."番組表";
+            "時～地上デジタル番組表";
         $smarty->assign("sitetitle", $sitetitle );
         $smarty->assign("top_time", str_replace( "-", "/" ,date('Y-m-d H:i:s', $top_time)) );
         $smarty->assign("last_time", str_replace( "-", "/" ,date('Y-m-d H:i:s', $last_time)) );
