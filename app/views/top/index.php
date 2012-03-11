@@ -376,7 +376,6 @@ h2 {
     position:absolute;
     background-image: url('<?php echo url('/') ?>imgs/trancBG70.png');
 }
-#tvtimes, .tvtimeDM {width:40px;}
 #tvtimes {
     width: 40px;
     top: 0px;
@@ -401,8 +400,17 @@ h2 {
     background-color:#BBB;
 }
 
-#tvtable div.ch_title, #tvtable div.prg {margin-right:2px;}
-#tvtable div.ch_title {padding:8px 0px;background-color:#333;color:#DDD;font-weight:bold;text-align:center}
+#tvtable div.prg {
+    margin-right:2px;
+}
+#tvtable div.ch_title {
+    padding:8px 0px;
+    background-color:#333;
+    color:#DDD;
+    font-weight:bold;
+    text-align:center;
+    margin-right:2px;
+}
 #tvtable div.prg {
 	overflow:hidden;
 	color:#444;
@@ -446,7 +454,8 @@ h2 {
     font-weight:bold;
     text-align:center
 }
-#float_titles div.ch_title div{
+#float_titles div.ch_title div {
+    cursor: pointer;
     padding:8px 0px;
     margin:0 6px 0 4px;
     background-image: url('<?php echo url("/") ?>imgs/trancBG50.png');
@@ -510,47 +519,49 @@ h2 {
 </div>
 
 <div id="time_selects">
-  <div class="set" id="jump-broadcast" >
-  <span class="title">放送波選択</span>
-  <ul>
-    <?php foreach ($types as $type): ?> 
-    <li <?php echo $type['selected'] ?>><a class="jump" href="<?php echo $type['link'] ?>"><?php echo $type['name'] ?></a></li>
-    <?php endforeach; ?>
-  </ul>
+  <div class="set" id="jump-broadcast">
+    <span class="title">放送波選択</span>
+    <ul>
+      <?php foreach ($types as $type): ?> 
+      <li <?php echo $type['selected'] ?>><a class="jump" href="<?php echo $type['link'] ?>"><?php echo $type['name'] ?></a></li>
+      <?php endforeach; ?>
+    </ul>
+    <br style="clear:left;" />
+  </div>
+
+  <div class="set" id="jump-time">
+    <span class="title">時間</span>
+    <ul>
+      <?php foreach ($toptimes as $top): ?> 
+      <li><a class="jump" href="<?php echo $top['link']?>"><?php echo $top['hour'] ?>～</a></li>
+      <?php endforeach; ?>
+    </ul>
+    <br style="clear:left;" />
+  </div>
+
   <br style="clear:left;" />
-</div>
 
-<div class="set" id="jump-time">
-  <span class="title">時間</span>
-  <ul>
-    <?php foreach ($toptimes as $top): ?> 
-    <li><a class="jump" href="<?php echo $top['link']?>"><?php echo $top['hour'] ?>～</a></li>
-    <?php endforeach; ?>
-  </ul><br style="clear:left;" />
-</div>
-<br style="clear:left;" />
+  <div class="set">
+    <ul>
+      <li><a href="recordedTable.php">録画済一覧</a></li>
+    </ul>
+  </div>
 
-<div class="set">
-  <ul>
-    <li><a href="recordedTable.php">録画済一覧</a></li>
-  </ul>
-</div>
-
-<div class="set" id="jump-day">
-<span class="title">日付</span>
-  <ul>
-    <?php foreach($days as $day): ?>
-    <li <?php echo $day['selected'] ?>>
-    <?php if ($day['d'] == '現在'): ?> 
-      <a class="jump-today" href="<?php echo $day['link'] ?>"><?php echo $day['d'] . $day['ofweek'] ?></a>
-    <?php else: ?> 
-      <a class="jump" href="<?php echo $day['link'] ?>"><?php echo $day['d'] . $day['ofweek'] ?></a>
-    <?php endif; ?>
-    </li>
-    <?php endforeach; ?>
-  </ul>
-  <br style="clear:left;" />
-</div>
+  <div class="set" id="jump-day">
+    <span class="title">日付</span>
+    <ul>
+      <?php foreach($days as $day): ?>
+      <li <?php echo $day['selected'] ?>>
+      <?php if ($day['d'] == '現在'): ?> 
+        <a class="jump-today" href="<?php echo $day['link'] ?>"><?php echo $day['d'] . $day['ofweek'] ?></a>
+      <?php else: ?> 
+        <a class="jump" href="<?php echo $day['link'] ?>"><?php echo $day['d'] . $day['ofweek'] ?></a>
+      <?php endif; ?>
+      </li>
+      <?php endforeach; ?>
+    </ul>
+    <br style="clear:left;" />
+  </div>
 
 </div>
 <br style="clear:left;" />
@@ -563,13 +574,15 @@ h2 {
   <span id="prg_info_desc"></span>
 </div>
 
-</div>
-
+<!-- ch一覧  -->
 <div style="position:absolute;bottom:0;">
-  <div class="tvtimeDM" style="float:left;">&nbsp;</div>
+
+  <!-- left-margin -->
+  <div style="width: 40px; float:left;">&nbsp;</div>
+
   <?php foreach ($programs as $program): ?> 
   <div class="ch_title">
-  <div style="cursor: pointer" onClick="javascript:PRG.chdialog('<?php echo $program['channel_disc'] ?>')" ><?php echo $program['station_name'] ?></div>
+    <div onClick="javascript:PRG.chdialog('<?php echo $program['channel_disc'] ?>')" ><?php echo $program['station_name'] ?></div>
   </div>
   <?php endforeach; ?>
 </div>
