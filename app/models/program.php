@@ -42,4 +42,16 @@ __SQL__;
         $db = DB::conn();
         return $db->update(self::TABLE, array('autorec' => 0), array('program_disc' => $program_disc));
     }
+
+    public function getPrograms($options = array()) 
+    {
+        $db = DB::conn();
+        $sql = <<<__SQL__
+SELECT * FROM Recorder_programTbl
+  WHERE channel_disc = :channel_disc AND endtime > :endtime AND starttime < :starttime
+  ORDER BY starttime ASC
+__SQL__;
+        $rows = $db->rows($sql, $options);
+        return $rows;
+    }
 }
