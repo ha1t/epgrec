@@ -162,8 +162,8 @@ table#reservation_table tr.ctg_10, #category_select a.ctg_10 {background-color: 
   <td><?php echo $rec['starttime'] ?></td>
   <td><?php echo $rec['station_name'] ?></td>
   <td><?php echo $rec['mode'] ?></td>
-  <td><a href="<?php echo $rec['asf'] ?>" id="tid_<?php echo $rec['program_disc'] ?>"><?php echo $rec['title'] ?></a></td>
-  <td><a href="<?php echo $rec['asf'] ?>" id="did_<?php echo $rec['program_disc'] ?>"><?php echo $rec['description'] ?></a></td>
+  <td><a href="#" id="tid_<?php echo $rec['program_disc'] ?>"><?php echo $rec['title'] ?></a></td>
+  <td><a href="#" id="did_<?php echo $rec['program_disc'] ?>"><?php echo $rec['description'] ?></a></td>
   <td><input type="button" value="変更" onClick="javascript:PRG.editdialog('<?php echo $rec['program_disc'] ?>')" /></td>
   <td><input type="button" value="削除" onClick="javascript:PRG.dialog('<?php echo $rec['program_disc'] ?>','<?php echo $rec['title'] ?>')" /></td>
  </tr>
