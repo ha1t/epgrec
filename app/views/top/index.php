@@ -493,8 +493,8 @@ h2 {
     <div class="container">
       <a class="brand" href="#"><?php echo $sitetitle ?></a>
       <ul class="nav">
-        <li><a href="index.php">番組表</a></li>
-        <li><a href="search.php">番組検索</a></li>
+        <li><a href="<?php echo url('/') ?>">番組表</a></li>
+        <li><a href="<?php echo url('program/search') ?>">番組検索</a></li>
         <li><a href="<?php echo url('reserve/index') ?>">予約一覧</a></li>
       </ul>
     </div>
