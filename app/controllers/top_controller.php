@@ -5,6 +5,7 @@
  */
 class TopController extends AppController
 {
+    // TODO: program/indexに持っていく
     public function index() 
     {
         require_once ROOT_DIR . '/config.php';
@@ -23,7 +24,6 @@ class TopController extends AppController
 
         $DAY_OF_WEEK = array( "(日)","(月)","(火)","(水)","(木)","(金)","(土)" );
 
-        // パラメータの処理
         // 表示する長さ（時間）
         $program_length = $settings->program_length;
         if (isset($_GET['length'])) {
@@ -35,11 +35,12 @@ class TopController extends AppController
 
         // 現在の時間
         $now_time = mktime( date("H"), 0 , 0 );
-        if (isset($_GET['time'] ) ) {
-            if( sscanf( $_GET['time'] , "%04d%2d%2d%2d", $y, $mon, $day, $h ) == 4 ) {
+        if (isset($_GET['time'])) {
+            if (sscanf($_GET['time'], "%04d%2d%2d%2d", $y, $mon, $day, $h) == 4) {
                 $tmp_time = mktime( $h, 0, 0, $mon, $day, $y );
-                if( ($tmp_time < ($now_time + 3600 * 24 * 8)) && ($tmp_time > ($now_time - 3600 * 24 * 8)) )
+                if (($tmp_time < ($now_time + 3600 * 24 * 8)) && ($tmp_time > ($now_time - 3600 * 24 * 8))) {
                     $now_time = $tmp_time;
+                }
             }
         }
         $last_time = $now_time + 3600 * $program_length;
@@ -50,11 +51,9 @@ class TopController extends AppController
             $tv_hours[] = date("H", $now_time + 3600 * $i);
         }
 
-        $channel_map = ChannelMaster::$GR;
-
         $st = 0;
         $programs = array();
-        foreach ($channel_map as $channel_disc => $no_use) {
+        foreach (ChannelMaster::$GR as $channel_disc => $no_use) {
             $prev_end = $now_time;
 
             $channel = Channel::get($channel_disc);
@@ -67,15 +66,7 @@ class TopController extends AppController
             $programs[$st]["station_name"]  = $channel->name;
             $programs[$st]["channel_disc"]  = $channel->channel_disc;
             $programs[$st]['list'] = array();
-            /*
-                'category_none' => 'none',
-                'height' => 0,
-                'title' => '',
-                'starttime' => '',
-                'description' => '',
-                'duration' => '',
-            );
-             */
+
             $num = 0;
             foreach ($rows as $row) {
                 // 前プログラムとの空きを調べる
@@ -113,29 +104,27 @@ class TopController extends AppController
                 }
 
                 // プログラムを埋める
+                if (Reserve::get($row['program_disc'])) {
+                    $row['rec'] = 1;
+                } else {
+                    $row['rec'] = 0;
+                }
                 $category = Category::get($row['category_disc']);
                 if ($category === false) {
-                    $category_name = 'none';
+                    $row['category_name'] = 'none';
                 }
+                $row['category_name'] = $category->name_en;
+                $row['height'] = $height;
+                $row['starttime'] = date("H:i", $start );
+                $row['prg_start'] = str_replace( "-", "/", $row['starttime']);
+                $row['duration'] = strtotime($row['endtime']) - strtotime($row['starttime']);
+                $row['channel'] = ($row['type'] == "GR" ? "地上D" : "BS" ) . ":". $row['channel'] . "ch";
 
-                $programs[$st]['list'][$num]['category_name'] = $category->name_en;
-                $programs[$st]['list'][$num]['program_disc'] = $row['program_disc'];
-                $programs[$st]['list'][$num]['height'] = $height;
-                $programs[$st]['list'][$num]['title'] = $row['title'];
-                $programs[$st]['list'][$num]['starttime'] = date("H:i", $start )."" ;
-                $programs[$st]['list'][$num]['description'] = $row['description'];
-                $programs[$st]['list'][$num]['prg_start'] = str_replace( "-", "/", $row['starttime']);
-                $programs[$st]['list'][$num]['duration'] = "" . (strtotime($row['endtime']) - strtotime($row['starttime']));
-                $programs[$st]['list'][$num]['channel'] = ($row['type'] == "GR" ? "地上D" : "BS" ) . ":". $row['channel'] . "ch";
-                if (Reserve::get($row['program_disc'])) {
-                    $programs[$st]['list'][$num]['rec'] = 1;
-                } else {
-                    $programs[$st]['list'][$num]['rec'] = 0;
-                }
+                $programs[$st]['list'][$num] = $row;
                 $num++;
             }
 
-            // 空きを埋める
+            // 高さだけを持つ空のアイテムを作って入れる
             if (($last_time - $prev_end) > 0) {
                 if (isset($programs[$st]['list'][$num])) {
                     throw new Exception('NULLである必要があります'); 
@@ -160,10 +149,10 @@ class TopController extends AppController
         // 局の幅
         $ch_set_width = $settings->ch_set_width;
         // 全体の幅
-        $chs_width = $ch_set_width * count($channel_map);
+        $chs_width = $ch_set_width * count(ChannelMaster::$GR);
 
         // GETパラメタ
-        $get_param = $_SERVER['SCRIPT_NAME'] . "?type=GR&length=".$program_length."";
+        $base_url = $_SERVER['SCRIPT_NAME'] . "?type=GR&length=".$program_length."";
 
         $categories = Category::getAll(); // カテゴリ一覧
 
@@ -172,7 +161,7 @@ class TopController extends AppController
         if ($settings->gr_tuners != 0) {
             $tuner_type = array(
                 'selected' => $type == "GR" ? 'class="selected"' : "",
-                'link' => $_SERVER['SCRIPT_NAME'] . "?type=GR&length=".$program_length."&time=".date( "YmdH", $now_time),
+                'link' => $_SERVER['SCRIPT_NAME'] . "?type=GR&length=".$program_length."&time=" . date("YmdH", $now_time),
                 'name' => '地上デジタル'
             );
             $types[] = $tuner_type;
@@ -182,19 +171,19 @@ class TopController extends AppController
         $days = array();
         $day = array();
         $day['d'] = "昨日";
-        $day['link'] = $get_param . "&time=". date( "YmdH", time() - 3600 *24 );
+        $day['link'] = $base_url . "&time=". date( "YmdH", time() - 3600 *24 );
         $day['ofweek'] = "";
         $day['selected'] = $now_time < mktime( 0, 0 , 0) ? 'class="selected"' : '';
 
         array_push( $days , $day );
         $day['d'] = "現在";
-        $day['link'] = $get_param;
+        $day['link'] = $base_url;
         $day['ofweek'] = "";
         $day['selected'] = "";
         array_push( $days, $day );
         for( $i = 0 ; $i < 8 ; $i++ ) {
             $day['d'] = "".date("d", time() + 24 * 3600 * $i ) . "日";
-            $day['link'] = $get_param . "&time=".date( "Ymd", time() + 24 * 3600 * $i) . date("H" , $now_time );
+            $day['link'] = $base_url . "&time=".date( "Ymd", time() + 24 * 3600 * $i) . date("H" , $now_time );
             $day['ofweek'] = $DAY_OF_WEEK[(int)date( "w", time() + 24 * 3600 * $i )];
             $day['selected'] = date("d", $now_time) == date("d", time() + 24 * 3600 * $i ) ? 'class="selected"' : '';
             array_push( $days, $day );
@@ -202,17 +191,17 @@ class TopController extends AppController
 
         // 時間選択
         $toptimes = array();
-        for( $i = 0 ; $i < 24; $i+=4 ) {
+        for ($i = 0; $i < 24; $i+=4) {
             $tmp = array();
             $tmp['hour'] = sprintf( "%02d:00", $i );
-            $tmp['link'] = $get_param . "&time=".date("Ymd", $now_time ) . sprintf("%02d", $i );
-            array_push( $toptimes, $tmp );
+            $tmp['link'] = $base_url . "&time=".date("Ymd", $now_time ) . sprintf("%02d", $i );
+            array_push($toptimes, $tmp);
         }
+
         $ch_set_width    = $settings->ch_set_width;
         $height_per_hour = $settings->height_per_hour;
         $height_per_min  = $settings->height_per_hour / 60;
-        $sitetitle = date( "Y", $now_time ) . "年" . date( "m", $now_time ) . "月" . date( "d", $now_time ) . "日". date( "H", $now_time ) .
-            "時～地上デジタル番組表";
+        $sitetitle = date('Y年m月d日H時～地上デジタル番組表', $now_time); 
         $now_time  = str_replace( "-", "/" ,date('Y-m-d H:i:s', $now_time));
         $last_time = str_replace( "-", "/" ,date('Y-m-d H:i:s', $last_time));
 
