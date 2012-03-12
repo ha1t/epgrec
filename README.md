@@ -26,6 +26,7 @@ http://travis-ci.org/#!/ha1t/epgrec
 - recorder_serviceにrecfriioハードコードされているのをやめる
 - table name prefixをなくす
 - twitter bootstrap 2.0対応
+- trancBGとかの不要画像を削除する
 
 ## v0.1 ##
 とりあえず最低限の動作。
