@@ -31,5 +31,6 @@ class ProgramTest extends PHPUnit_Framework_TestCase
         $rows = Program::search('', array()); 
         $row = current($rows);
         $this->assertEquals('program', strtolower(get_class(Program::get($row['program_disc'])))); 
+        $this->assertEquals($row['program_disc'], Program::get($row['program_disc'])->program_disc); 
     }
 }
