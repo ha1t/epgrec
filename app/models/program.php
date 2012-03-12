@@ -43,11 +43,13 @@ __SQL__;
         return $db->update(self::TABLE, array('autorec' => 0), array('program_disc' => $program_disc));
     }
 
+    // TODO: チャンネルごとのプログラムなのでメソッド名を修正する
     public function getPrograms($options = array()) 
     {
         $db = DB::conn();
+        $table = self::TABLE;
         $sql = <<<__SQL__
-SELECT * FROM Recorder_programTbl
+SELECT * FROM {$table}
   WHERE channel_disc = :channel_disc AND endtime > :endtime AND starttime < :starttime
   ORDER BY starttime ASC
 __SQL__;
