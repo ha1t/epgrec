@@ -21,17 +21,13 @@ class TopController extends AppController
         }
 
         $settings = Settings::factory();
-
-        $DAY_OF_WEEK = array( "(日)","(月)","(火)","(水)","(木)","(金)","(土)" );
+        $type = "GR"; // 地上=GR/BS=BS
 
         // 表示する長さ（時間）
         $program_length = $settings->program_length;
         if (isset($_GET['length'])) {
            $program_length = (int)$_GET['length'];
         }
-
-        // 地上=GR/BS=BS
-        $type = "GR";
 
         // 現在の時間
         $now_time = mktime( date("H"), 0 , 0 );
@@ -146,14 +142,9 @@ class TopController extends AppController
             $st++;
         }
 
-        // 局の幅
-        $ch_set_width = $settings->ch_set_width;
-        // 全体の幅
-        $chs_width = $ch_set_width * count(ChannelMaster::$GR);
-
-        // GETパラメタ
-        $base_url = $_SERVER['SCRIPT_NAME'] . "?type=GR&length=".$program_length."";
-
+        $ch_set_width = $settings->ch_set_width; // 局の幅
+        $chs_width = $ch_set_width * count(ChannelMaster::$GR); // 全体の幅
+        $base_url = url('top/index')  . "?type=GR&length={$program_length}";
         $categories = Category::getAll(); // カテゴリ一覧
 
         // タイプ選択
@@ -168,42 +159,44 @@ class TopController extends AppController
         }
 
         // 日付選択
-        $days = array();
-        $day = array();
-        $day['d'] = "昨日";
-        $day['link'] = $base_url . "&time=". date( "YmdH", time() - 3600 *24 );
-        $day['ofweek'] = "";
-        $day['selected'] = $now_time < mktime( 0, 0 , 0) ? 'class="selected"' : '';
-
-        array_push( $days , $day );
-        $day['d'] = "現在";
-        $day['link'] = $base_url;
-        $day['ofweek'] = "";
-        $day['selected'] = "";
-        array_push( $days, $day );
-        for( $i = 0 ; $i < 8 ; $i++ ) {
-            $day['d'] = "".date("d", time() + 24 * 3600 * $i ) . "日";
-            $day['link'] = $base_url . "&time=".date( "Ymd", time() + 24 * 3600 * $i) . date("H" , $now_time );
-            $day['ofweek'] = $DAY_OF_WEEK[(int)date( "w", time() + 24 * 3600 * $i )];
-            $day['selected'] = date("d", $now_time) == date("d", time() + 24 * 3600 * $i ) ? 'class="selected"' : '';
-            array_push( $days, $day );
+        $days[] = array(
+            'd' => "昨日",
+            'link' => "{$base_url}&time=". date('YmdH', time() - 3600 * 24),
+            'ofweek' => 7,
+            'selected' => $now_time < mktime(0, 0 ,0) ? true : false,
+        );
+        $days[] = array(
+            'd' => '現在',
+            'link' => $base_url,
+            'ofweek' => 7,
+            'selected' => false,
+        );
+        for ($i = 0; $i < 8; $i++) {
+            $day = array(
+                'd' => date('d', time() + 24 * 3600 * $i) . '日',
+                'link' => "{$base_url}&time=" . date('Ymd', time() + 24 * 3600 * $i) . date("H" , $now_time),
+                'ofweek' => (int)date("w", time() + 24 * 3600 * $i),
+                'selected' => date("d", $now_time) == date("d", time() + 24 * 3600 * $i ) ? true : false,
+            );
+            $days[] = $day;
         }
 
         // 時間選択
         $toptimes = array();
         for ($i = 0; $i < 24; $i+=4) {
-            $tmp = array();
-            $tmp['hour'] = sprintf( "%02d:00", $i );
-            $tmp['link'] = $base_url . "&time=".date("Ymd", $now_time ) . sprintf("%02d", $i );
-            array_push($toptimes, $tmp);
+            $tmp = array(
+                'hour' => sprintf("%02d:00", $i),
+                'link' => "{$base_url}&time=" . date("Ymd", $now_time ) . sprintf("%02d", $i),
+            );
+            $toptimes[] = $tmp;
         }
 
         $ch_set_width    = $settings->ch_set_width;
         $height_per_hour = $settings->height_per_hour;
         $height_per_min  = $settings->height_per_hour / 60;
         $sitetitle = date('Y年m月d日H時～地上デジタル番組表', $now_time); 
-        $now_time  = str_replace( "-", "/" ,date('Y-m-d H:i:s', $now_time));
-        $last_time = str_replace( "-", "/" ,date('Y-m-d H:i:s', $last_time));
+        $now_time  = str_replace('-', '/' ,date('Y-m-d H:i:s', $now_time));
+        $last_time = str_replace('-', '/' ,date('Y-m-d H:i:s', $last_time));
 
         /*
         $smarty = new Smarty();
