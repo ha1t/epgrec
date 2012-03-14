@@ -1,42 +1,46 @@
+<?php $DAY_OF_WEEK = array('(日)','(月)','(火)','(水)','(木)','(金)','(土)', ''); ?>
 <!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title><?php echo $sitetitle ?></title>
 <meta http-equiv="Content-Style-Type" content="text/css" />
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.0/jquery.min.js"></script>
+<script type="text/javascript"  src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js"></script>
 <link rel="stylesheet" href="<?php echo url('/') ?>css/bootstrap.css" /> 
-<link rel="stylesheet" href="<?php echo url('/') ?>css/jquery-ui-1.7.2.custom.css" />
-<script type="text/javascript" src="<?php echo url('/') ?>js/jquery-1.3.2.min.js"></script>
-<script type="text/javascript" src="<?php echo url('/') ?>js/jquery-ui-1.7.2.custom.min.js"></script>
+<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/blitzer/jquery-ui.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="<?php echo url('/') ?>js/mdabasic.js"></script>
 <script type="text/javascript">
 
 function tvtimes_scroll() {
-    var t2max = $('#tvtimes2').position().left;
-    var ftmin = $('#float_titles').position().top;
+    var float_titles_min = $('#float_titles').position().top;
     scroll_tvtimes2();
     $(window).scroll(function () {
         $('#tvtimes').css('left', parseInt($(document).scrollLeft())); 
-        var newTop = parseInt($(document).scrollTop());
-        if (newTop < ftmin) {
-            newTop = ftmin;
+        var new_top = parseInt($(document).scrollTop());
+        if (new_top < float_titles_min) {
+            new_top = float_titles_min;
         }
-        $('#float_titles').css('top', newTop);
+        $('#float_titles').css('top', new_top);
         scroll_tvtimes2();
         $('#float_follows').css('left', parseInt($(document).scrollLeft()));
     });
     $(window).resize(function () {
             scroll_tvtimes2();
     });
-    function scroll_tvtimes2(){
-        var inwidth = parseInt($('body').innerWidth());
-        var newLeft = inwidth - parseInt($('#tvtimes2').width()) + parseInt($( document ).scrollLeft());
-        if (newLeft > t2max) {
-            newLeft = t2max
-        }
-        $('#tvtimes2').css('left', newLeft);
-        $('#float_follows').width(inwidth);
+}
+
+// 左端にある縦の時間軸表示を、横スクロールに追従させる関数
+function scroll_tvtimes2() {
+    var tvtimes2_max = $('#tvtimes2').position().left;
+    var inwidth = parseInt($('body').innerWidth());
+    var new_left = inwidth - parseInt($('#tvtimes2').width()) + parseInt($(document).scrollLeft());
+    if (new_left > tvtimes2_max) {
+        new_left = tvtimes2_max
     }
+
+    $('#tvtimes2').css('left', new_left);
+    $('#float_follows').width(inwidth);
 }
 
 // hover時のプログラム表示
@@ -91,6 +95,7 @@ function prg_hover() {
     );
 }
 
+// http://detail.chiebukuro.yahoo.co.jp/qa/question_detail/q1239309807
 	var PRG = {
 		chdialog:function(disc){
 			$('#channelDialog').dialog('close');
@@ -272,7 +277,6 @@ function prg_hover() {
 		defaultCk:{md:'',x:0,y:0},
 		jqSel:[{sel:'#jump-time a.jump',md:'x'},{sel:'#jump-day a.jump',md:'xy'},{sel:'#jump-day a.jump-today',md:'x'},{sel:'#jump-broadcast a.jump',md:'y'}],
 		INI:function(){
-//			this.defaultCk.y = $('#float_titles').position().top;
 			$.each(this.jqSel, function(){
 				var md = this.md;
 				$(this.sel).click(function(){MDA.SCR.oCk(md)})
@@ -461,7 +465,10 @@ h2 {
     background-image: url('<?php echo url("/") ?>imgs/trancBG50.png');
 }
 
-#float_follows {position:absolute;}
+#float_follows {
+    position:absolute;
+}
+
 #prg_info {
 	display:none;
 	position:absolute;
@@ -504,93 +511,99 @@ h2 {
 <div id="float_titles">
   <div id="float_follows">
     <div class="set">
+      <ul><li><a href="envSetting.php">環境設定</a></li></ul>
+    </div>
+
+    <div class="set ctg_sel" id="category_select">
+      <span class="title"><a href="javascript:CTG.toggle()">強調表示</a></span>
       <ul>
-        <li><a href="envSetting.php">環境設定</a></li>
+        <?php foreach ($categories as $category): ?> 
+        <li><a href="javascript:CTG.select('<?php echo $category->name_en ?>');" class="ctg_<?php echo $category->name_en ?>"><?php echo $category->name_jp ?></a></li>
+        <?php endforeach; ?>
       </ul>
     </div>
 
-<div class="set ctg_sel" id="category_select">
-  <span class="title"><a href="javascript:CTG.toggle()">強調表示</a></span>
-  <ul>
-    <?php foreach ($categories as $category): ?> 
-    <li><a href="javascript:CTG.select('<?php echo $category->name_en ?>');" class="ctg_<?php echo $category->name_en ?>"><?php echo $category->name_jp ?></a></li>
-    <?php endforeach; ?>
-  </ul>
-</div>
+    <div id="time_selects">
+      <div class="set" id="jump-broadcast">
+        <span class="title">放送波選択</span>
+        <ul>
+          <?php foreach ($types as $type): ?> 
+          <li <?php echo $type['selected'] ?>><a class="jump" href="<?php echo $type['link'] ?>"><?php echo $type['name'] ?></a></li>
+          <?php endforeach; ?>
+        </ul>
+        <br style="clear:left;" />
+      </div>
 
-<div id="time_selects">
-  <div class="set" id="jump-broadcast">
-    <span class="title">放送波選択</span>
-    <ul>
-      <?php foreach ($types as $type): ?> 
-      <li <?php echo $type['selected'] ?>><a class="jump" href="<?php echo $type['link'] ?>"><?php echo $type['name'] ?></a></li>
-      <?php endforeach; ?>
-    </ul>
+      <div class="set" id="jump-time">
+        <span class="title">時間</span>
+        <ul>
+          <?php foreach ($toptimes as $top): ?> 
+          <li><a class="jump" href="<?php echo $top['link']?>"><?php echo $top['hour'] ?>～</a></li>
+          <?php endforeach; ?>
+        </ul>
+        <br style="clear:left;" />
+      </div>
+
+      <br style="clear:left;" />
+
+      <div class="set">
+        <ul>
+          <li><a href="recordedTable.php">録画済一覧</a></li>
+        </ul>
+      </div>
+
+      <div class="set" id="jump-day">
+        <span class="title">日付</span>
+        <ul>
+          <?php foreach($days as $day): ?>
+          <?php $selected = ($day['selected'] === true) ? 'class="selected"' : ''; ?> 
+          <?php $class_name = ($day['d'] === '現在') ? 'jump-today' : 'jump'; ?> 
+          <li <?php echo $selected ?>>
+            <a class="<?php echo $class_name ?>" href="<?php echo $day['link'] ?>">
+              <?php echo $day['d'] . $DAY_OF_WEEK[$day['ofweek']] ?>
+            </a>
+          </li>
+          <?php endforeach; ?>
+        </ul>
+        <br style="clear:left;" />
+      </div>
+    </div><!-- end: time_selects -->
     <br style="clear:left;" />
-  </div>
 
-  <div class="set" id="jump-time">
-    <span class="title">時間</span>
-    <ul>
-      <?php foreach ($toptimes as $top): ?> 
-      <li><a class="jump" href="<?php echo $top['link']?>"><?php echo $top['hour'] ?>～</a></li>
+    <!-- prg説明文表示  -->
+    <div id="prg_info">
+      <h3 id="prg_info_title" style="color: white;"></h3>
+      <span id="prg_info_channel" class="prg_sub"></span>
+      <span id="prg_info_date" class="prg_sub"></span>
+      <span id="prg_info_desc"></span>
+    </div>
+
+    <!-- ch一覧  -->
+    <div style="position:absolute;bottom:0;">
+      <!-- left-margin -->
+      <div style="width: 40px; float:left;">&nbsp;</div>
+
+      <?php foreach ($programs as $program): ?> 
+      <div class="ch_title">
+        <div onClick="javascript:PRG.chdialog('<?php echo $program['channel_disc'] ?>')" ><?php echo $program['station_name'] ?></div>
+      </div>
       <?php endforeach; ?>
-    </ul>
+    </div>
+
     <br style="clear:left;" />
+  </div><!-- end: float_follows -->
+  <div id="float_titles_dummy" style="width:1410px;height:120px;">&nbsp;</div>
+</div><!-- end: float_titles -->
+
+<!-- DEBUG:
+<div class="row" style="width: <?php echo $chs_width ?>px">
+  <?php foreach (ChannelMaster::$GR as $channel_disc => $no_use): ?> 
+  <div class="span2" style="border: 1px black solid; width: <?php echo $ch_set_width ?>pj">
+    <?php echo Channel::get($channel_disc)->name ?>
   </div>
-
-  <br style="clear:left;" />
-
-  <div class="set">
-    <ul>
-      <li><a href="recordedTable.php">録画済一覧</a></li>
-    </ul>
-  </div>
-
-  <div class="set" id="jump-day">
-    <span class="title">日付</span>
-    <ul>
-      <?php foreach($days as $day): ?>
-      <li <?php echo $day['selected'] ?>>
-      <?php if ($day['d'] == '現在'): ?> 
-        <a class="jump-today" href="<?php echo $day['link'] ?>"><?php echo $day['d'] . $day['ofweek'] ?></a>
-      <?php else: ?> 
-        <a class="jump" href="<?php echo $day['link'] ?>"><?php echo $day['d'] . $day['ofweek'] ?></a>
-      <?php endif; ?>
-      </li>
-      <?php endforeach; ?>
-    </ul>
-    <br style="clear:left;" />
-  </div>
-
+  <?php endforeach ?>
 </div>
-<br style="clear:left;" />
-
-<!-- prg説明文表示  -->
-<div id="prg_info">
-  <h3 id="prg_info_title" style="color: white;"></h3>
-  <span id="prg_info_channel" class="prg_sub"></span>
-  <span id="prg_info_date" class="prg_sub"></span>
-  <span id="prg_info_desc"></span>
-</div>
-
-<!-- ch一覧  -->
-<div style="position:absolute;bottom:0;">
-
-  <!-- left-margin -->
-  <div style="width: 40px; float:left;">&nbsp;</div>
-
-  <?php foreach ($programs as $program): ?> 
-  <div class="ch_title">
-    <div onClick="javascript:PRG.chdialog('<?php echo $program['channel_disc'] ?>')" ><?php echo $program['station_name'] ?></div>
-  </div>
-  <?php endforeach; ?>
-</div>
-
-<br style="clear:left;" />
-</div>
-
-<div id="float_titles_dummy" style="width:1410px;height:120px;">&nbsp;</div>
+-->
 
 <div id="tvtable">
   <div id="tvtimes">
@@ -639,7 +652,9 @@ h2 {
 <div id="floatBox4Dialog">
 jQuery UI Dialog
 </div>
-<div id="channelDialog">jQuery UI Dialog</div>
+<div id="channelDialog">
+jQuery UI Dialog
+</div>
 
 <script type="text/javascript">
 var INISet = {
