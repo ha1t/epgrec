@@ -11,7 +11,6 @@
 <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/blitzer/jquery-ui.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="<?php echo url('/') ?>js/mdabasic.js"></script>
 <script type="text/javascript">
-
 function tvtimes_scroll() {
     var float_titles_min = $('#float_titles').position().top;
     scroll_tvtimes2();
@@ -45,6 +44,7 @@ function scroll_tvtimes2() {
 
 // hover時のプログラム表示
 function prg_hover() {
+
     function aClick(){
         var TG = $(this).children('.prg_dummy');
         var startTime = new Date(TG.children('.prg_start').html());
@@ -121,7 +121,7 @@ function prg_hover() {
 			});
 		},
 		rec:function(id){
-			$.get('api.php', { method: 'simpleReservation', program_id: id } ,function(data){
+            $.get('<?php echo url('api/simpleReservation') ?>', { program_id: id } ,function(data){
 				if(data.match(/^error/i)){
 					alert(data);
 					$('#floatBox4Dialog').dialog('close');
@@ -392,7 +392,7 @@ h2 {
 	text-align:center;
 	font-weight:bold;
 	font-size:120%;
-	background-image: url(<?php echo url('/') ?>imgs/dot2.gif);
+	background-image: url('<?php echo url('/') ?>imgs/dot2.gif');
 	background-repeat: repeat-x;
 	background-position: left bottom;
 }
@@ -418,8 +418,8 @@ h2 {
 #tvtable div.prg {
 	overflow:hidden;
 	color:#444;
-	background-image: url(<?php echo url('/') ?>imgs/dot2.gif);
-	background-image: url(<?php echo url('/') ?>imgs/prg_bg2.png);
+	background-image: url('<?php echo url('/') ?>imgs/dot2.gif');
+	background-image: url('<?php echo url('/') ?>imgs/prg_bg2.png');
 	background-repeat: repeat-x;
 	background-position: left bottom;
 	-moz-border-radius: 0.6em 0.6em 0.3em 0.3em;

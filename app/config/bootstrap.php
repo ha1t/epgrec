@@ -12,6 +12,7 @@ require_once APP_DIR.'app_model.php';
 require_once APP_DIR.'app_exception.php';
 
 require_once ROOT_DIR . 'Smarty/Smarty.class.php';
+require_once ROOT_DIR . 'config.php';
 
 // autoload
 $code = '

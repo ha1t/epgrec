@@ -111,7 +111,7 @@ class TopController extends AppController
                 }
                 $row['category_name'] = $category->name_en;
                 $row['height'] = $height;
-                $row['starttime'] = date("H:i", $start );
+                $row['starttime'] = date("Y-m-d H:i", $start);
                 $row['prg_start'] = str_replace( "-", "/", $row['starttime']);
                 $row['duration'] = strtotime($row['endtime']) - strtotime($row['starttime']);
                 $row['channel'] = ($row['type'] == "GR" ? "地上D" : "BS" ) . ":". $row['channel'] . "ch";
