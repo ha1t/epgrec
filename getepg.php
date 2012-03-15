@@ -3,7 +3,12 @@
 /**
  * 番組表を取得する。
  */
-require_once 'config.php';
+define('ROOT_DIR', dirname(__FILE__) . '/');
+define('APP_DIR', ROOT_DIR . '/app/');
+
+require_once ROOT_DIR.'dietcake/dietcake.php';
+
+require_once dirname(__FILE__) . '/config.php';
 require_once INSTALL_PATH . '/Settings.class.php';
 
 $settings = Settings::factory();
