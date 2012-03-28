@@ -23,19 +23,22 @@ class APIController extends AppController
     // reserve_id,title,descriptionを受け取り更新する
     public function editReservation()
     {
-        if (!isset($_POST['reserve_id'])) {
+        $reserve_id = Param::get('reserve_id', false);
+        if (!$reserve_id) {
             exit('Error: 予約idが指定されていません');
         }
 
-        $reserve_id = $_POST['reserve_id'];
         $program = Program::get($reserve_id); 
         if ($program === false) {
             exit('Error: 指定された番組idは存在しません');
         }
 
         $program->update(
-            array('title' => $_POST['title'], 'description' => $_POST['description'])
-        ); 
+            array(
+                'title' => Param::get('title'),
+                'description' => Param::get('description')
+            )
+        );
     }
 
     public function saveSettings()
@@ -47,8 +50,8 @@ class APIController extends AppController
         $settings->save();
 
         $smarty = new Smarty();
-        $smarty->template_dir = dirname(dirname(__FILE__)) . '/templates/'; 
-        $smarty->compile_dir = dirname(dirname(__FILE__)) . '/templates_c/'; 
+        $smarty->template_dir = dirname(dirname(__FILE__)) . '/templates/';
+        $smarty->compile_dir = dirname(dirname(__FILE__)) . '/templates_c/';
         $smarty->assign('message', '設定が保存されました');
         $smarty->assign('url', 'index.php');
         $smarty->display("dialog.html");
