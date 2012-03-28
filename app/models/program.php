@@ -54,6 +54,13 @@ SELECT * FROM {$table}
   ORDER BY starttime ASC
 __SQL__;
         $rows = $db->rows($sql, $options);
+
+        if (is_array($rows)) {
+            foreach ($rows as $key => $row) {
+                $rows[$key] = new self($row);
+            }
+        }
+
         return $rows;
     }
 }

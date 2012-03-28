@@ -527,9 +527,7 @@ h2 {
       <div class="set" id="jump-broadcast">
         <span class="title">放送波選択</span>
         <ul>
-          <?php foreach ($types as $type): ?> 
-          <li <?php echo $type['selected'] ?>><a class="jump" href="<?php echo $type['link'] ?>"><?php echo $type['name'] ?></a></li>
-          <?php endforeach; ?>
+          <li class="selected"><a class="jump" href="<?php echo url('top/index', array('type' => 'GR', 'length' => $program_length, 'time' => date("YmdH", $now_time))) ?>">地上デジタル</a></li>
         </ul>
         <br style="clear:left;" />
       </div>
@@ -539,7 +537,7 @@ h2 {
         <ul>
           <?php foreach (range(0, 20, 4) as $hour): ?> 
           <li>
-            <a class="jump" href="<?php echo "{$base_url}&time=" . date('Ymd', mktime(date('H',0,0))) . sprintf('%02d', $hour)   ?>"><?php echo sprintf('%02d:00', $hour)  ?>～</a>
+            <a class="jump" href="<?php echo "{$base_url}&time=" . date('Ymd', $now_time) . sprintf('%02d', $hour)   ?>"><?php echo sprintf('%02d:00', $hour)  ?>～</a>
           </li>
           <?php endforeach; ?>
         </ul>
@@ -587,7 +585,7 @@ h2 {
 
       <?php foreach ($programs as $program): ?> 
       <div class="ch_title">
-        <div onClick="javascript:PRG.chdialog('<?php echo $program['channel_disc'] ?>')" ><?php echo $program['station_name'] ?></div>
+        <div onClick="javascript:PRG.chdialog('<?php echo $program['channel_disc'] ?>')" ><?php echo $program['name'] ?></div>
       </div>
       <?php endforeach; ?>
     </div>
@@ -609,8 +607,8 @@ h2 {
 
 <div id="tvtable">
   <div id="tvtimes">
-  <?php foreach ($tv_hours as $time): ?> 
-  <div class="tvtime"><?php echo $time ?></div>
+  <?php foreach (range(0, 7)  as $i): ?> 
+  <div class="tvtime"><?php echo date('H', $now_time + 3600 * $i) ?></div>
   <?php endforeach; ?>
   </div>
 
@@ -618,7 +616,7 @@ h2 {
     <?php foreach ($programs as $program): ?> 
     <div class="ch_set" style="width: <?php echo $ch_set_width ?>px" >
       <div class="ch_programs">
-      <?php foreach ($program['list'] as $item): ?> 
+      <?php foreach ($program['programs'] as $item): ?> 
         <?php $class_rec = '' ?>
         <?php if ($item['rec'] > 0): ?> 
           <?php $class_rec = 'prg_rec' ?>
@@ -645,9 +643,9 @@ h2 {
  </div>
 
  <div id="tvtimes2">
-   <?php foreach($tv_hours as $time): ?>
-     <div class="tvtime"><?php echo $time ?></div>
-   <?php endforeach; ?>
+  <?php foreach (range(0, 7)  as $i): ?> 
+  <div class="tvtime"><?php echo date('H', $now_time + 3600 * $i) ?></div>
+  <?php endforeach; ?>
  </div>
 </div>
 
@@ -663,8 +661,8 @@ var INISet = {
     prgRecordPlusURL : 'recordp.php',		// 詳細予約
     prgCancelURL : 'cancelReservation.php',		// 予約キャンセル
     dotMin : <?php echo $height_per_min ?>,
-    tableStartTime : '<?php echo $now_time ?>',
-    tableEndTime : '<?php echo $last_time ?>'
+    tableStartTime : '<?php echo str_replace('-', '/' ,date('Y-m-d H:i:s', $now_time)) ?>',
+    tableEndTime : '<?php echo str_replace('-', '/' ,date('Y-m-d H:i:s', $last_time)) ?>'
 }
 </script>
 </body>
