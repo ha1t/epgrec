@@ -537,8 +537,10 @@ h2 {
       <div class="set" id="jump-time">
         <span class="title">時間</span>
         <ul>
-          <?php foreach ($toptimes as $top): ?> 
-          <li><a class="jump" href="<?php echo $top['link']?>"><?php echo $top['hour'] ?>～</a></li>
+          <?php foreach (range(0, 20, 4) as $hour): ?> 
+          <li>
+            <a class="jump" href="<?php echo "{$base_url}&time=" . date('Ymd', mktime(date('H',0,0))) . sprintf('%02d', $hour)   ?>"><?php echo sprintf('%02d:00', $hour)  ?>～</a>
+          </li>
           <?php endforeach; ?>
         </ul>
         <br style="clear:left;" />

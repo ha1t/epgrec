@@ -17,6 +17,7 @@ http://travis-ci.org/#!/ha1t/epgrec
 
 ## TODO ##
 
+- http://twitter.github.com/bootstrap/javascript.html#modals を使う
 - DB周りをインストーラーで設定できるように(installerの再実装)
 - CSRFのリスクをなくす
 - 放送時刻変更への完璧な追従

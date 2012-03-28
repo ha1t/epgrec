@@ -6,28 +6,21 @@
 class TopController extends AppController
 {
     // TODO: program/indexに持っていく
-    public function index() 
+    public function index()
     {
         require_once ROOT_DIR . '/config.php';
         require_once INSTALL_PATH . "/Settings.class.php";
 
         // 設定ファイルの有無を検査する
         if (!file_exists(INSTALL_PATH . "/settings/config.xml")) {
-            header( "Content-Type: text/html;charset=utf-8" );
-            exit( "<script type=\"text/javascript\">\n" .
-                "<!--\n".
-                "window.open(\"install/step1.php\",\"_self\");".
-                "// -->\n</script>" );
+            $this->redirect('install/step1');
         }
 
         $settings = Settings::factory();
         $type = "GR"; // 地上=GR/BS=BS
 
         // 表示する長さ（時間）
-        $program_length = $settings->program_length;
-        if (isset($_GET['length'])) {
-           $program_length = (int)$_GET['length'];
-        }
+        $program_length = (int)Param::get('length', $settings->program_length);
 
         // 現在の時間
         $now_time = mktime( date("H"), 0 , 0 );
@@ -42,7 +35,7 @@ class TopController extends AppController
         $last_time = $now_time + 3600 * $program_length;
 
         // 時刻欄
-        $tv_hours = array(); 
+        $tv_hours = array();
         for ($i = 0; $i < $program_length; $i++) {
             $tv_hours[] = date("H", $now_time + 3600 * $i);
         }
@@ -181,32 +174,13 @@ class TopController extends AppController
             $days[] = $day;
         }
 
-        // 時間選択
-        $toptimes = array();
-        for ($i = 0; $i < 24; $i+=4) {
-            $tmp = array(
-                'hour' => sprintf("%02d:00", $i),
-                'link' => "{$base_url}&time=" . date("Ymd", $now_time ) . sprintf("%02d", $i),
-            );
-            $toptimes[] = $tmp;
-        }
-
         $ch_set_width    = $settings->ch_set_width;
         $height_per_hour = $settings->height_per_hour;
         $height_per_min  = $settings->height_per_hour / 60;
-        $sitetitle = date('Y年m月d日H時～地上デジタル番組表', $now_time); 
+        $sitetitle = date('Y年m月d日H時～地上デジタル番組表', $now_time);
         $now_time  = str_replace('-', '/' ,date('Y-m-d H:i:s', $now_time));
         $last_time = str_replace('-', '/' ,date('Y-m-d H:i:s', $last_time));
 
-        /*
-        $smarty = new Smarty();
-        $smarty->template_dir = ROOT_DIR . 'templates/'; 
-        $smarty->compile_dir = ROOT_DIR . 'templates_c/'; 
-        $smarty->assign(get_defined_vars());
-        $smarty->display('index.html');
-        exit;
-         */
-
-        $this->set(get_defined_vars()); 
+        $this->set(get_defined_vars());
     }
 }

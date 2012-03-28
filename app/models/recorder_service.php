@@ -72,7 +72,7 @@ class RecorderService
     /**
      * isDumped
      *
-     * １時間以内のepgdumpデータがあるかどうか
+     * 1時間以内のepgdumpデータがあるかどうか
      */
     public static function isDumped($xml_file) {
         if(!file_exists($xml_file)) {
