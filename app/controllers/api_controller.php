@@ -5,19 +5,24 @@
  */
 class APIController extends AppController
 {
+    public function render()
+    {
+        // APIControllerではレンダリングはしない
+    }
+
     // 簡易予約
     public function simpleReservation()
     {
         if (!isset($_GET['program_id']) || $_GET['program_id'] == '') {
-            exit('Error: 番組idが指定されていません');
+            echo('Error: 番組idが指定されていません');
+            return;
         }
 
         $result = Reserve::simpleReserve($_GET['program_id']);
         if ($result === false) {
-            exit('Error: 指定された番組idは存在しません');
+            echo('Error: 指定された番組idは存在しません');
+            return;
         }
-
-        exit;
     }
 
     // reserve_id,title,descriptionを受け取り更新する
@@ -25,12 +30,14 @@ class APIController extends AppController
     {
         $reserve_id = Param::get('reserve_id', false);
         if (!$reserve_id) {
-            exit('Error: 予約idが指定されていません');
+            echo('Error: 予約idが指定されていません');
+            return;
         }
 
         $program = Program::get($reserve_id); 
         if ($program === false) {
-            exit('Error: 指定された番組idは存在しません');
+            echo('Error: 指定された番組idは存在しません');
+            return;
         }
 
         $program->update(

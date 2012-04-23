@@ -10,6 +10,7 @@ require_once CONFIG_DIR . 'core.php';
 require_once APP_DIR.'app_controller.php';
 require_once APP_DIR.'app_model.php';
 require_once APP_DIR.'app_exception.php';
+require_once APP_DIR.'app_view_none.php';
 
 require_once ROOT_DIR . 'Smarty/Smarty.class.php';
 require_once ROOT_DIR . 'config.php';
