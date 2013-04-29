@@ -1,16 +1,17 @@
 <?php
 // bootstrap
 
-define('MASTER_DIR', APP_DIR . 'master/'); 
+define('MASTER_DIR', APP_DIR . 'master/');
 
 require_once CONFIG_DIR . 'database.php';
 require_once CONFIG_DIR . 'router.php';
 require_once CONFIG_DIR . 'core.php';
+require_once CONFIG_DIR . 'log.php';
 
-require_once APP_DIR.'app_controller.php';
-require_once APP_DIR.'app_model.php';
-require_once APP_DIR.'app_exception.php';
-require_once APP_DIR.'app_view_none.php';
+require_once APP_DIR . 'app_controller.php';
+require_once APP_DIR . 'app_model.php';
+require_once APP_DIR . 'app_exception.php';
+require_once APP_DIR . 'app_none_view.php';
 
 require_once ROOT_DIR . 'Smarty/Smarty.class.php';
 require_once ROOT_DIR . 'config.php';
